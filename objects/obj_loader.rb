@@ -1,11 +1,19 @@
 #!/usr/bin/ruby -w
 
+require 'gl' # for draw method
+
+require "math/entity3d.rb"
+
+include Gl
+
+
 =begin
 	.obj (wavefront) 3d object loader
 =end
 
 
 class Face
+	attr_accessor	:n,	:v
 	@n = [] # 3 Integers ( normal ) 
 	@v = [] # 3 Integers ( the 3 vertices index )
 	def initialize( v, n )
@@ -14,17 +22,83 @@ class Face
 	end
 end
 
-class WaveFront
+class WaveFront < Entity3d
 	attr_reader	:vertices,	:normals,	:faces
 
 	def initialize(file_name)
+		super()
 		@vertices = []
 		@normals = []
 		@faces = []
 		load_file(file_name)
 	end
-	
+
+	def draw
+		glMatrixMode(GL_MODELVIEW)
+		glPushMatrix()
+
+		# translate to pos		
+		glTranslate(@pos[0],@pos[1],@pos[2])
+		draw_vectors
+
+		# rotate to the new orientation
+        left = @front.cross(@up)
+        rot_matrix = [
+            @front.a+[0.0],
+            @up.a+[0.0],
+            left.a+[0.0],
+            [0.0, 0.0, 0.0, 1.0]
+        ]
+        glMultMatrix(rot_matrix)
+
+
+		# draw the vertices/faces
+		glColor(1,1,1)
+		#glBegin(GL_QUADS)
+		#glBegin(GL_POINTS)
+		#glBegin(GL_LINES)
+		glBegin(GL_TRIANGLES)
+		@faces.each { |face|
+			#glNormal(vertices.last)
+			#tex_point_index = 0
+			#vertices[0..3].each { |vertex|
+			#	glTexCoord(@tex_coords[tex_point_index])
+			#	tex_point_index = ( tex_point_index +1 ) & 3
+			#	glVertex3fv(vertex)
+			#}
+		
+			face.v.each { |vertex_i|
+				glVertex3fv( @vertices[vertex_i] )
+			}	
+		}
+		glEnd()
+		
+		glPopMatrix()
+	end
+
+	def draw_vectors
+		glPushMatrix()
+		glColor(0.0,1.0,0.0)
+		glBegin(GL_LINES)
+			glVertex([0, 0, 0] )
+			glVertex((@front*4.0).a)
+		glEnd()
+		glColor(1.0,0.0,0.0)
+		glBegin(GL_LINES)
+			glVertex([0,0,0])
+			glVertex( (@up*4.0).a)
+		glEnd()
+		right = @front.cross(@up)
+		glColor(0.0,0.0,1.0)
+		glBegin(GL_LINES)
+			glVertex([0,0,0])
+			glVertex((right*4.0).a)
+		glEnd()
+		glPopMatrix()
+	end
+
 	def load_file(file_name)
+		puts "Loader: loading wavefront obj : #{file_name}"
 		begin
 			file = File.new(file_name,"r")
 			while ( line = file.gets)
@@ -35,7 +109,7 @@ class WaveFront
 			puts "Exception : #{err}"
 			err
 		end
-		if false
+=begin
 			@vertices.each { |vertex|
 				puts "v #{vertex[0]} #{vertex[1]} #{vertex[2]}"
 			}
@@ -45,7 +119,8 @@ class WaveFront
 			@faces.each { |face|
 				puts face.inspect
 			}
-		end
+=end
+		puts "Loader : done."
 	end
 
 	def process_line(line)

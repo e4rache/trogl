@@ -100,7 +100,7 @@ class CubeTex < Entity3d
 		glTranslate(@pos[0],@pos[1],@pos[2])
 		draw_vectors
 
-		# rotate to have the new orientation
+		# rotate to the new orientation
 		left = @front.cross(@up)
 		rot_matrix = [ 
 			@front.a+[0.0], 

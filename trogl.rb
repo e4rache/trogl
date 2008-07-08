@@ -19,7 +19,7 @@ class Trogl
 	attr_accessor	:window_width, :window_height, :cam_angle, :entities, :loop_callback,	:draw_axis
 
 	def initialize(w=800,h=600,f=90)
-		puts "Initializing MyGlEnv..."
+		puts "Initializing Trogl ..."
 		@draw_axis = true
 		@target_fps = 30.0
 		@delay_fps = 1000.0 / @target_fps
@@ -40,9 +40,6 @@ class Trogl
 	def target_fps=(t_fps)
 		@target_fps = t_fps
 		@delay_fps = 1000.0 / @target_fps
-	end
-
-	def target_fps
 	end
 
 	def bind_key(key_sym, proc_to_bind )
@@ -156,6 +153,7 @@ class Trogl
 	    glEnable(GL_DEPTH_TEST)
 		glEnable(GL_COLOR_MATERIAL)
 	    glShadeModel(GL_SMOOTH)
+		init_lights
 	end
 end
 
