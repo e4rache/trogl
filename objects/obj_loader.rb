@@ -106,17 +106,7 @@ class WaveFront < Entity3d
 			puts "Exception : #{err}"
 			err
 		end
-=begin
-			@vertices.each { |vertex|
-				puts "v #{vertex[0]} #{vertex[1]} #{vertex[2]}"
-			}
-			@normals.each { |normal|
-				puts "vn #{normal[0]} #{normal[1]} #{normal[2]}"
-			}
-			@faces.each { |face|
-				puts face.inspect
-			}
-=end
+		puts "Loader : loaded #{@faces.size} faces, #{@vertices.size} vertices, #{@normals.size} normals"
 		puts "Loader : done."
 	end
 
