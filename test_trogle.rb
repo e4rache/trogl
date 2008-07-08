@@ -6,7 +6,7 @@ require "objects/cube_tex.rb"
 
 require "objects/obj_loader.rb"
 
-g = Trogl.new(200,200,120)
+g = Trogl.new(800,600,120)
 
 cube_tex = CubeTex.new()
 cube_tex.pos=[0,-1,-4]

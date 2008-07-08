@@ -59,17 +59,14 @@ class WaveFront < Entity3d
 		#glBegin(GL_LINES)
 		glBegin(GL_TRIANGLES)
 		@faces.each { |face|
-			#glNormal(vertices.last)
-			#tex_point_index = 0
-			#vertices[0..3].each { |vertex|
-			#	glTexCoord(@tex_coords[tex_point_index])
-			#	tex_point_index = ( tex_point_index +1 ) & 3
-			#	glVertex3fv(vertex)
-			#}
+			glNormal( @normals[ face.n[0] ] )
+			glVertex( @vertices[ face.v[0] ] )
 		
-			face.v.each { |vertex_i|
-				glVertex3fv( @vertices[vertex_i] )
-			}	
+			glNormal( @normals[ face.n[1] ] )
+			glVertex( @vertices[ face.v[1] ] )
+
+			glNormal( @normals[ face.n[2] ] )
+			glVertex( @vertices[ face.v[2] ] )
 		}
 		glEnd()
 		

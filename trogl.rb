@@ -121,12 +121,19 @@ class Trogl
 		glMatrixMode(GL_MODELVIEW)
 	end
 
-	def init_lights(pos=[0,5,10,1])
+	def init_lights(pos=[2,5,10,1])
 		position = pos
-	    ambient = [0.7, 0.7, 0.7, 1.0]
-	    mat_diffuse = [0.8, 0.8, 0.8, 1.0]
-	    mat_specular = [1.0, 1.0, 1.0, 1.0]
-    	mat_shininess = [70.0]
+		
+    ambient = [0.2, 0.2, 0.2, 1.0]
+    mat_diffuse = [0.6, 0.6, 0.6, 1.0]
+    mat_specular = [1.0, 1.0, 1.0, 1.0]
+    mat_shininess = [50.0]
+
+	   
+#	   	ambient = [0.7, 0.7, 0.7, 1.0]
+#	    mat_diffuse = [0.8, 0.8, 0.8, 1.0]
+#	    mat_specular = [1.0, 1.0, 1.0, 1.0]
+ #   	mat_shininess = [70.0]
 
 	    glEnable(GL_LIGHTING)
 	    glEnable(GL_LIGHT0)
