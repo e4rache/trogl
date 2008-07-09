@@ -114,21 +114,17 @@ class WaveFront < Entity3d
 			case line_array[0]
 				when "v" # vertex
 					v = [ line_array[1].to_f , line_array[2].to_f , line_array[3].to_f ]
-					# puts " v " + v.inspect
-					@vertices.push(v)
+					@vertices << v
 			#	when "vt" # vertex texture 
 				when "vn" # vertex normal
 					vn = [ line_array[1].to_f, line_array[2].to_f, line_array[3].to_f ]
-					@normals.push(vn)
+					@normals << vn
 				when "f"  # face
-					# puts "f " + res.inspect
-					vertex_index_array = []
-					normal_index_array = []
 					tmp = line_array[1].split("/") + line_array[2].split("/") + line_array[3].split("/")
 					vertex_index_array = [tmp[0].to_i-1,tmp[3].to_i-1,tmp[6].to_i-1]
 					normal_index_array = [tmp[2].to_i-1,tmp[5].to_i-1,tmp[8].to_i-1]
 					f = Face.new( vertex_index_array, normal_index_array)
-					@faces.push(f)
+					@faces << f
 			end
 		end
 	end
