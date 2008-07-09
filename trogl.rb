@@ -79,6 +79,15 @@ class Trogl
 		
 		draw_gl_scene
 
+		#
+		
+		SDL::TTF.init
+		font = SDL::TTF.open("data/ft/verdana.ttf",12)
+		s = SDL.get_video_surface
+		font.draw_solid_utf8(s,"Bleaargh",10,10,255,255,255)
+		
+		#
+
 		SDL.GLSwapBuffers
 
 	end
@@ -132,16 +141,17 @@ class Trogl
 	def update_lights(pos=[2,5,10,1])
 
 		position = pos	
-	    ambient = [0.2, 0.2, 0.2, 1.0]
-    	mat_diffuse = [0.6, 0.6, 0.6, 1.0]
-    	mat_specular = [1.0, 1.0, 1.0, 1.0]
-    	mat_shininess = [50.0]
+		ambient = [0.2, 0.2, 0.2, 1.0]
+		mat_diffuse = [0.6, 0.6, 0.6, 1.0]
+		mat_specular = [1.0, 1.0, 1.0, 1.0]
+		mat_shininess = [50.0]
 
-#	   	ambient = [0.7, 0.7, 0.7, 1.0]
-#	    mat_diffuse = [0.8, 0.8, 0.8, 1.0]
-#	    mat_specular = [1.0, 1.0, 1.0, 1.0]
-#   	mat_shininess = [70.0]
-
+=begin
+	  	ambient = [0.2, 0.1, 0.1, 1.0]
+	    mat_diffuse = [0.8, 0.8, 0.8, 1.0]
+	    mat_specular = [1.0, 1.0, 1.0, 1.0]
+	   	mat_shininess = [100.0]
+=end
 		glLight(GL_LIGHT0, GL_AMBIENT, ambient)
 		glLight(GL_LIGHT0, GL_POSITION, position)	
 
@@ -153,7 +163,7 @@ class Trogl
 	def init_sdl(w,h)
 		SDL.init(SDL::INIT_VIDEO)
 		SDL.set_GL_attr(SDL::GL_DOUBLEBUFFER,1)
-		SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
+		SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE|SDL::FULLSCREEN)
 	end
 
 	def init_gl
