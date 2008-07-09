@@ -11,7 +11,7 @@ class CubeTex < Entity3d
 
 	def initialize
 		super
-		@tex_file="images/Stripes0007_S.jpg"
+		@tex_file="data/pic/Stripes0007_S.jpg"
 		init_tex
 
 		@tex_coords = [
@@ -134,15 +134,11 @@ class CubeTex < Entity3d
 		glBegin(GL_LINES)
 			glVertex([0, 0, 0] )
 			glVertex((@front*4.0).a)
-		glEnd()
 		glColor(1.0,0.0,0.0)
-		glBegin(GL_LINES)
 			glVertex([0,0,0])
 			glVertex( (@up*4.0).a)
-		glEnd()
 		right = @front.cross(@up)
 		glColor(0.0,0.0,1.0)
-		glBegin(GL_LINES)
 			glVertex([0,0,0])
 			glVertex((right*4.0).a)
 		glEnd()

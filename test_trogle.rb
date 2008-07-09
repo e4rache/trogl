@@ -13,10 +13,10 @@ cube_tex.pos=[-3,0,0]
 
 ## begin test wavefront loader
 
-wf_cube = WaveFront.new("objects/cube.obj")	
+wf_cube = WaveFront.new("data/obj/cube.obj")	
 wf_cube.pos=[3,0,0]
 
-wf_rock = WaveFront.new("objects/rock.obj")	
+wf_rock = WaveFront.new("data/obj/rock.obj")	
 wf_rock.pos=[-0,0,0]
 
 ## end test wavefront loader
