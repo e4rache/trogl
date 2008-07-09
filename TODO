@@ -1,4 +1,3 @@
 - add camera control with mouse
-- fix light which moves along with camera.
 - add 2d text ( HUD )
 - add support for key toggle in key handler

@@ -89,7 +89,9 @@ class Trogl
 		gluLookAt(0,2,5, 0,0,0, 0,1,0)		
 
 		glRotate(@cam_angle, 0,1,0 )
-		
+	
+		update_lights
+
 		# put entities
 		Axis.draw() if @draw_axis
 
@@ -122,24 +124,26 @@ class Trogl
 	end
 
 	def init_lights(pos=[2,5,10,1])
-		position = pos
-		
-    ambient = [0.2, 0.2, 0.2, 1.0]
-    mat_diffuse = [0.6, 0.6, 0.6, 1.0]
-    mat_specular = [1.0, 1.0, 1.0, 1.0]
-    mat_shininess = [50.0]
+		glEnable(GL_LIGHTING)
+		glEnable(GL_LIGHT0)
+		update_lights(pos=[2,5,10,1])
+	end
 
-	   
+	def update_lights(pos=[2,5,10,1])
+
+		position = pos	
+	    ambient = [0.2, 0.2, 0.2, 1.0]
+    	mat_diffuse = [0.6, 0.6, 0.6, 1.0]
+    	mat_specular = [1.0, 1.0, 1.0, 1.0]
+    	mat_shininess = [50.0]
+
 #	   	ambient = [0.7, 0.7, 0.7, 1.0]
 #	    mat_diffuse = [0.8, 0.8, 0.8, 1.0]
 #	    mat_specular = [1.0, 1.0, 1.0, 1.0]
- #   	mat_shininess = [70.0]
+#   	mat_shininess = [70.0]
 
-	    glEnable(GL_LIGHTING)
-	    glEnable(GL_LIGHT0)
-	
-	    glLight(GL_LIGHT0, GL_AMBIENT, ambient)
-	    glLight(GL_LIGHT0, GL_POSITION, position)
+		glLight(GL_LIGHT0, GL_AMBIENT, ambient)
+		glLight(GL_LIGHT0, GL_POSITION, position)	
 
 	    glMaterial(GL_FRONT, GL_DIFFUSE, mat_diffuse)
 	    glMaterial(GL_FRONT, GL_SPECULAR, mat_specular)
