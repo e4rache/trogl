@@ -35,6 +35,7 @@ g.bind_key(SDL::Key::F		, Proc.new {anim_obj.forward(0.1)} )
 g.bind_key(SDL::Key::V		, Proc.new {anim_obj.forward(-0.1)} )
 g.bind_key(SDL::Key::F1		, Proc.new {anim_obj = cube_tex} )
 g.bind_key(SDL::Key::F2		, Proc.new {anim_obj = wf_rock} )
+g.bind_key(SDL::Key::F3		, Proc.new {anim_obj = wf_plane1} )
 
 g.entities.push(wf_rock)
 g.entities.push(cube_tex)

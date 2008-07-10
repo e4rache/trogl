@@ -24,7 +24,7 @@ class Face
 end
 
 class WaveFront < Entity3d
-	attr_reader	:vertices,	:normals,	:faces
+	attr_reader	:vertices,	:normals,	:faces,	:display_list
 
 	def initialize(file_name)
 		super()
@@ -32,6 +32,7 @@ class WaveFront < Entity3d
 		@normals = []
 		@faces = []
 		load_file(file_name)
+		gen_display_list()
 	end
 
 	def draw
@@ -51,13 +52,17 @@ class WaveFront < Entity3d
             [0.0, 0.0, 0.0, 1.0]
         ]
         glMultMatrix(rot_matrix)
-
-
 		# draw the vertices/faces
 		glColor(1,1,1)
-		#glBegin(GL_QUADS)
-		#glBegin(GL_POINTS)
-		#glBegin(GL_LINES)
+		glCallList(@display_list)
+		glPopMatrix()
+	end
+
+
+	def gen_display_list()
+		@display_list = glGenLists(1)
+		glNewList(@display_list,GL_COMPILE);
+
 		@faces.each { |face|
 			if face.type == GL_TRIANGLES
 				glBegin(GL_TRIANGLES)
@@ -85,8 +90,7 @@ class WaveFront < Entity3d
 			end
 			glEnd()
 		}
-		
-		glPopMatrix()
+		glEndList()
 	end
 
 	def draw_vectors
@@ -138,14 +142,14 @@ class WaveFront < Entity3d
 				when "f"  # face
 					case line_array.size
 						when 4 # triangle
-							puts " Triangle : #{line_array.inspect}"
+						#	puts " Triangle : #{line_array.inspect}"
 							tmp = line_array[1].split("/") + line_array[2].split("/") + line_array[3].split("/")
 							vertex_index_array = [tmp[0].to_i-1,tmp[3].to_i-1,tmp[6].to_i-1]
 							normal_index_array = [tmp[2].to_i-1,tmp[5].to_i-1,tmp[8].to_i-1]
 							f = Face.new( vertex_index_array, normal_index_array,GL_TRIANGLES)
 							@faces << f
 						when 5 # quad
-							puts " Quad : #{line_array.inspect}"
+						#	puts " Quad : #{line_array.inspect}"
 							tmp = line_array[1].split("/") + line_array[2].split("/") + line_array[3].split("/") + line_array[4].split("/")
 							vertex_index_array = [ tmp[0].to_i-1, tmp[3].to_i-1, tmp[6].to_i-1, tmp[9].to_i-1 ]
 							normal_index_array = [ tmp[2].to_i-1, tmp[5].to_i-1, tmp[8].to_i-1, tmp[10].to_i-1 ]
