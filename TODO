@@ -1,3 +1,5 @@
-- add camera control with mouse
-- add 2d text ( HUD )
-- add support for key toggle in key handler
+- troggle.rb        : add camera control with mouse
+- troggle.rb        : add 2d text ( HUD )
+- event_handler/    : add support for key toggle in key handler
+- obj/obj_loader.rb : add support for openGL call display list to optimise the drawing
+- obj/obj_loader.rb : add support for changing the base reference and scaling of the obj data
