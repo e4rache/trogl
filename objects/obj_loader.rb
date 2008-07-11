@@ -11,6 +11,7 @@ include Gl
 	.obj (wavefront) 3d object loader
 =end
 
+WF_DEBUG = false
 
 class Face
 	attr_accessor	:n,	:v, :type
@@ -135,6 +136,7 @@ class WaveFront < Entity3d
 				when "v" # vertex
 					v = [ line_array[1].to_f , line_array[2].to_f , line_array[3].to_f ]
 					@vertices << v
+					puts " v #{v.inspect} " if WF_DEBUG
 			#	when "vt" # vertex texture 
 				when "vn" # vertex normal
 					vn = [ line_array[1].to_f, line_array[2].to_f, line_array[3].to_f ]
@@ -142,15 +144,16 @@ class WaveFront < Entity3d
 				when "f"  # face
 					case line_array.size
 						when 4 # triangle
-						#	puts " Triangle : #{line_array.inspect}"
+							#	puts " Triangle : #{line_array.inspect}"
 							tmp = line_array[1].split("/") + line_array[2].split("/") + line_array[3].split("/")
 							vertex_index_array = [tmp[0].to_i-1,tmp[3].to_i-1,tmp[6].to_i-1]
 							normal_index_array = [tmp[2].to_i-1,tmp[5].to_i-1,tmp[8].to_i-1]
 							f = Face.new( vertex_index_array, normal_index_array,GL_TRIANGLES)
 							@faces << f
 						when 5 # quad
-						#	puts " Quad : #{line_array.inspect}"
+							puts " Quad : #{line_array.inspect}" if WF_DEBUG
 							tmp = line_array[1].split("/") + line_array[2].split("/") + line_array[3].split("/") + line_array[4].split("/")
+							puts " tmp (line split) = #{tmp}" if WF_DEBUG
 							vertex_index_array = [ tmp[0].to_i-1, tmp[3].to_i-1, tmp[6].to_i-1, tmp[9].to_i-1 ]
 							normal_index_array = [ tmp[2].to_i-1, tmp[5].to_i-1, tmp[8].to_i-1, tmp[10].to_i-1 ]
 							f = Face.new( vertex_index_array, normal_index_array,GL_QUADS)
