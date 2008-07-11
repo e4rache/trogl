@@ -18,7 +18,7 @@ require 'event_handler/sdl_event_manager.rb'
 class Trogl
 	attr_accessor	:window_width, :window_height, :cam_angle, :entities, :loop_callback,	:draw_axis
 
-	def initialize(w=800,h=600,f=90)
+	def initialize(w=200,h=200,f=90)
 		puts "Initializing Trogl ..."
 		@draw_axis = true
 		@target_fps = 30.0
@@ -80,12 +80,10 @@ class Trogl
 		draw_gl_scene
 
 		#
-		
 		SDL::TTF.init
 		font = SDL::TTF.open("data/ft/verdana.ttf",12)
 		s = SDL.get_video_surface
 		font.draw_solid_utf8(s,"Bleaargh",10,10,255,255,255)
-		
 		#
 
 		SDL.GLSwapBuffers
@@ -163,7 +161,7 @@ class Trogl
 	def init_sdl(w,h)
 		SDL.init(SDL::INIT_VIDEO)
 		SDL.set_GL_attr(SDL::GL_DOUBLEBUFFER,1)
-		SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE|SDL::FULLSCREEN)
+		SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
 	end
 
 	def init_gl

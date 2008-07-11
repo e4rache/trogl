@@ -25,10 +25,11 @@ class Face
 end
 
 class WaveFront < Entity3d
-	attr_reader	:vertices,	:normals,	:faces,	:display_list
+	attr_reader	:vertices,	:normals,	:faces,	:display_list, :size
 
-	def initialize(file_name)
+	def initialize(file_name,size=1.0)
 		super()
+		@size=size
 		@vertices = []
 		@normals = []
 		@faces = []
@@ -63,6 +64,14 @@ class WaveFront < Entity3d
 	def gen_display_list()
 		@display_list = glGenLists(1)
 		glNewList(@display_list,GL_COMPILE);
+		glPushMatrix()
+		# rezise the object
+		glMultMatrix([
+			[@size,   0.0,   0.0, 0.0],
+			[  0.0, @size,   0.0, 0.0],
+			[  0.0,   0.0, @size, 0.0],
+			[  0.0,   0.0,   0.0, 1.0],
+		]) if @size != 1.0
 
 		@faces.each { |face|
 			if face.type == GL_TRIANGLES
@@ -91,6 +100,7 @@ class WaveFront < Entity3d
 			end
 			glEnd()
 		}
+		glPopMatrix()
 		glEndList()
 	end
 

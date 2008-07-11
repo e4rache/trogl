@@ -6,7 +6,7 @@ require "objects/cube_tex.rb"
 
 require "objects/obj_loader.rb"
 
-g = Trogl.new(800,600,120)
+g = Trogl.new(200,200,90)
 
 cube_tex = CubeTex.new()
 cube_tex.pos=[-3,0,0]
@@ -14,11 +14,11 @@ cube_tex.pos=[-3,0,0]
 wf_test = WaveFront.new("data/obj/mug.obj")
 wf_test.pos=[-5,5,-5]
 
-wf_rock = WaveFront.new("data/obj/rock.obj")	
+wf_rock = WaveFront.new("data/obj/rock.obj",1.0)	
 wf_rock.pos=[-0,0,0]
 
-wf_plane = WaveFront.new("data/obj/toyplane.obj")
-wf_plane.pos=[20,20,-55]
+wf_plane = WaveFront.new("data/obj/toyplane.obj",0.05)
+wf_plane.pos=[0,4,0]
 
 g.draw_axis=true
 g.target_fps=25
