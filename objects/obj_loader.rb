@@ -62,6 +62,11 @@ class WaveFront < Entity3d
 
 
 	def gen_display_list()
+		if WF_DEBUG
+			puts "preparing display list for object. "
+			puts " normals  : #{@normals.inspect}" 
+			puts " vertices : #{@vertices.inspect}"
+		end
 		@display_list = glGenLists(1)
 		glNewList(@display_list,GL_COMPILE);
 		glPushMatrix()
@@ -107,8 +112,8 @@ class WaveFront < Entity3d
 	def draw_vectors
 		glPushMatrix()
 		glBegin(GL_LINES)
-			glColor(0.0,1.0,0.0)
-			glVertex([0, 0, 0] )
+			glColor( 0.0, 1.0, 0.0 )
+			glVertex( [0, 0, 0] )
 			glVertex((@front*4.0).a)
 			
 			glColor(1.0,0.0,0.0)
@@ -163,10 +168,11 @@ class WaveFront < Entity3d
 						when 5 # quad
 							puts " Quad : #{line_array.inspect}" if WF_DEBUG
 							tmp = line_array[1].split("/") + line_array[2].split("/") + line_array[3].split("/") + line_array[4].split("/")
-							puts " tmp (line split) = #{tmp}" if WF_DEBUG
+							puts " tmp (line split) = #{tmp.inspect}" if WF_DEBUG
 							vertex_index_array = [ tmp[0].to_i-1, tmp[3].to_i-1, tmp[6].to_i-1, tmp[9].to_i-1 ]
-							normal_index_array = [ tmp[2].to_i-1, tmp[5].to_i-1, tmp[8].to_i-1, tmp[10].to_i-1 ]
+							normal_index_array = [ tmp[2].to_i-1, tmp[5].to_i-1, tmp[8].to_i-1, tmp[11].to_i-1 ]
 							f = Face.new( vertex_index_array, normal_index_array,GL_QUADS)
+							puts "adding face : #{f.inspect}" if WF_DEBUG
 							@faces << f
 					end
 			end

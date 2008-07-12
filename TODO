@@ -1,4 +1,7 @@
 - trogl.rb        : add camera control with mouse
 - trogl.rb        : add 2d text ( HUD )
+
 - event_handler/    : add support for key toggle in key handler
-- obj/obj_loader.rb : add support for changing the base reference and scaling of the obj data
+
+- obj/obj_loader.rb : add support for changing the base reference
+- obj/obj_loader.rb : fix object scaling. works but scales the whole mvnt space, not just the object drawing
