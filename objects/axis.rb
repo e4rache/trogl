@@ -20,6 +20,21 @@ class Axis
 		glVertex( [0.0,0.0, 100.0] )
 		
 		glEnd()
+		draw_xz_plane_grid
 		glPopMatrix()
+	end
+
+	def Axis.draw_xz_plane_grid
+		glBegin(GL_LINES)
+		-10.upto(10) { |i|
+			
+			glVertex([i*10 ,0.0, -100 ])
+			glVertex( [i*10 ,0.0, 100])
+			
+			glVertex( [-100,0.0,i*10])
+			glVertex( [100,0.0,i*10])
+		
+		}
+		glEnd()
 	end
 end

@@ -7,7 +7,6 @@ require "glu"
 require "sdl"
 require "objects/axis.rb"
 
-
 require "mathn"
 
 include Gl
@@ -16,9 +15,9 @@ include Glu
 require 'event_handler/sdl_event_manager.rb'
 
 class Trogl
-	attr_accessor	:window_width, :window_height, :cam_angle, :entities, :loop_callback,	:draw_axis
+	attr_accessor	:window_width, :window_height, :cam_angle, :entities, :loop_callback,	:draw_axis, :cam
 
-	def initialize(w=200,h=200,f=90)
+	def initialize(w=200,h=200,f=90,caption="trogl")
 		puts "Initializing Trogl ..."
 		@draw_axis = true
 		@target_fps = 30.0
@@ -29,11 +28,12 @@ class Trogl
 		@window_height = h
 		@fov=f
 		@cycles=0
-		
+		@cam=Entity3d.new()
+		@cam.pos=[ 5,5,5 ]
 		init_gl_window(@window_width,@window_height)
+		SDL::WM.set_caption(caption,"")
 		@eventManager = SdlEventManager.create()
 		@eventManager.set_vid_resize_callback((method:reshape))
-		
 		puts "Done."
 	end
 
@@ -44,6 +44,10 @@ class Trogl
 
 	def bind_key(key_sym, proc_to_bind )
 		@eventManager.bind_key(key_sym , proc_to_bind )
+	end
+
+	def bind_mouse(proc_to_bind)
+		@eventManager.bind_mouse(proc_to_bind)
 	end
 
 	def start(&block)
@@ -93,9 +97,13 @@ class Trogl
 	def draw_gl_scene
 
 		# put cam
-		gluLookAt(0,2,5, 0,0,0, 0,1,0)		
+		#gluLookAt(0,2,5, 0,0,0, 0,1,0)		
+		gluLookAt(
+			@cam.pos[0], @cam.pos[1], @cam.pos[2], 			#position
+			@cam.pos[0]+@cam.front[0], @cam.pos[1]+@cam.front[1], @cam.pos[2]+@cam.front[2],  # looking at
+			@cam.up[0], @cam.up[1], @cam.up[2] )			# up vector
 
-		glRotate(@cam_angle, 0,1,0 )
+		#glRotate(@cam_angle, 0,1,0 )
 	
 		update_lights
 

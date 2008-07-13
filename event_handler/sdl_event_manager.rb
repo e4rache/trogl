@@ -17,6 +17,8 @@ class SdlEventManager
 	def initialize()
 		puts "initializing event handler"
 		@@keyb_handler = KeybHandler.create()
+		@@vid_resize_callback = nil
+		@@mouse_event_callback = nil
 	end
 	
 	def process_events
@@ -38,6 +40,10 @@ class SdlEventManager
 					# callback the reshape
 					puts " vid reshape " + event.w.inspect + " | " + event.h.inspect
 					@@vid_resize_callback.call(event.w,event.h) if @@vid_resize_callback != nil
+				when SDL::Event2::MouseMotion
+						# callback the mousemotion method
+						# puts "mouse mvt : #{event.inspect} , #{@@mouse_event_callback}"
+						@@mouse_event_callback.call(event) if @@mouse_event_callback != nil
 			end
 		end
 		#SDL::Key.scan
@@ -57,6 +63,10 @@ class SdlEventManager
 	
 	def bind_key(sdl_key_sym,method)
 		@@keyb_handler.bind_key(sdl_key_sym, method)	
+	end
+
+	def bind_mouse(mouse_callback)
+		@@mouse_event_callback = mouse_callback
 	end
 
 	def exec_key_pressed()

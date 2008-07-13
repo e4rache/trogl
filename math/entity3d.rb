@@ -41,6 +41,12 @@ class Entity3d
 	alias rot_right pitch
 	alias rot_x pitch
 
+	def rot_vert(angle) # rotate about the Z referencial axis , not the self up vector 
+		q = Quat.axis_rotation(Vec.new([0.0,1.0,0.0]),angle)
+		@up = q.rotate(@up).normalized
+		@front = q.rotate(@front).normalized
+	end
+
 	def to_s
 		res = @front.dot(@up)
 		" Entity3d : pos-#{@pos}   front-#{@front}   up-#{@up} \n scal prod = #{res} "		
@@ -51,6 +57,4 @@ class Entity3d
 	end
 
 end
-
-
 

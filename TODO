@@ -1,4 +1,3 @@
-- trogl.rb        : add camera control with mouse
 - trogl.rb        : add 2d text ( HUD )
 
 - event_handler/    : add support for key toggle in key handler

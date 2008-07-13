@@ -5,8 +5,7 @@ require "objects/cube.rb"
 require "objects/cube_tex.rb"
 require "objects/obj_loader.rb"
 
-g = Trogl.new(1000,600,90)	# create window ( width, height, fov )
-
+g = Trogl.new(1000,600,90,".oO Trogl Oo.")	# create window ( width, height, fov )
 # create a textured cube and set it's position
 cube_tex = CubeTex.new()
 cube_tex.pos=[-3,0,0]
@@ -23,6 +22,7 @@ cube_tex.pos=[-3,0,0]
 #wf_test = WaveFront.new("data/obj/mug.obj",0.5)
 #wf_test = WaveFront.new("data/obj/toyplane.obj",0.05)
 wf_test = WaveFront.new("data/obj/diatomee.obj",0.5)
+#wf_test = WaveFront.new("data/obj/bone.obj",0.05)
 wf_test.pos=[3,1,0]
 
 # sets some params in trogl
@@ -34,7 +34,7 @@ g.entities.push(cube_tex)
 g.entities.push(wf_test)
 
 # some key bindings
-anim_obj = wf_test
+anim_obj = g.cam
 g.bind_key(SDL::Key::LEFT   , Proc.new {g.cam_angle+=2} )
 g.bind_key(SDL::Key::RIGHT  , Proc.new {g.cam_angle-=2} )
 g.bind_key(SDL::Key::Q      , Proc.new { exit } )
@@ -48,8 +48,23 @@ g.bind_key(SDL::Key::F		, Proc.new {anim_obj.forward(0.1)} )
 g.bind_key(SDL::Key::V		, Proc.new {anim_obj.forward(-0.1)} )
 g.bind_key(SDL::Key::F1		, Proc.new {anim_obj = cube_tex} )
 g.bind_key(SDL::Key::F2		, Proc.new {anim_obj = wf_test} )
-#g.bind_key(SDL::Key::F3		, Proc.new {anim_obj = } )
+g.bind_key(SDL::Key::F3		, Proc.new {anim_obj = g.cam } )
 #g.bind_key(SDL::Key::F4		, Proc.new {anim_obj = } )
+
+# proc for mouse_event processing
+
+mouse_callback = Proc.new { |event|
+	if ( (event.x==100) && (event.y==100) )
+		puts "ignored #{event.inspect}"
+	else
+		g.cam.rot_x(event.yrel/200.0)
+		g.cam.rot_vert(-event.xrel/200.0)
+		SDL::Mouse.warp(100,100) ## that stupid mouse warp generates ans SDL::Event2::MouseMotion .... have to ignore it somehow ...
+	end
+}
+g.bind_mouse(mouse_callback)
+SDL::WM::grab_input(SDL::WM::GRAB_ON)
+#SDL::Mouse.hide
 
 # tell trogl to rumble
 g.start {
