@@ -4,6 +4,8 @@ require 'trogl/event_handler/keyb_handler.rb'
 #	SDL event manager singleton
 # ====================================
 
+
+module Trogl::EventHandler
 class SdlEventManager
 	private_class_method :new
 	@@instance = nil
@@ -72,4 +74,5 @@ class SdlEventManager
 		arr = @@keyb_handler.methods_to_exec()
 		arr.each { |method| method.call() }
 	end
+end
 end

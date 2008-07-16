@@ -1,3 +1,5 @@
+module Trogl::EventHandler
+
 class KeyState
 	attr_accessor	:id , :pressed, :toggled, :bound_proc
 
@@ -74,4 +76,5 @@ class KeybHandler
 		end
 		methods
 	end
+end
 end

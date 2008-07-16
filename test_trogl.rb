@@ -2,7 +2,7 @@
 
 require "lib/trogl.rb"
 
-g = Trogl::Scene.new(200,200,70,".oO Trogl Oo.")	# create window ( width, height, fov )
+g = Trogl::Scene.new(800,600,70,".oO Trogl Oo.")	# create window ( width, height, fov )
 # create a textured cube and set it's position
 cube_tex = Trogl::Object3d::CubeTex.new()
 cube_tex.pos=[-3,0,0]

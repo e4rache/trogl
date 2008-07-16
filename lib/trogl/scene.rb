@@ -33,7 +33,7 @@ module Trogl
 			@cam.pos=[ 5,5,5 ]
 			init_gl_window(@window_width,@window_height)
 			SDL::WM.set_caption(caption,"")
-			@event_manager = SdlEventManager.create()
+			@event_manager = Trogl::EventHandler::SdlEventManager.create()
 			@event_manager.set_vid_resize_callback((method:reshape))
 			puts "Done."
 		end
@@ -109,7 +109,7 @@ module Trogl
 		update_lights
 
 		# put entities
-		Axis.draw() if @draw_axis
+		Trogl::Object3d::Axis.draw() if @draw_axis
 
 		@entities.each { |ent| ent.draw() }
 
