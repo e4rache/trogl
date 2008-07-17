@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require "lib/trogl.rb"
 
@@ -29,7 +29,6 @@ g.target_fps=30
 # add the loaded objects to trogl
 g.entities.push(cube_tex)
 g.entities.push(wf_test)
-
 # some key bindings
 anim_obj = g.cam
 g.bind_key(SDL::Key::LEFT   , Proc.new {g.cam_angle+=2} )

@@ -20,7 +20,7 @@ module Trogl
 
 		def initialize(w=200,h=200,f=90,caption="trogl")
 			puts "Initializing Trogl ..."
-			@draw_axis = true
+			@draw_axis = false
 			@target_fps = 30.0
 			@delay_fps = 1000.0 / @target_fps
 			@entities = []
@@ -38,119 +38,121 @@ module Trogl
 			puts "Done."
 		end
 
-	def target_fps=(t_fps)
-		@target_fps = t_fps
-		@delay_fps = 1000.0 / @target_fps
-	end
-
-	def bind_key(key_sym, proc_to_bind )
-		@event_manager.bind_key(key_sym , proc_to_bind )
-	end
-
-	def bind_mouse(proc_to_bind)
-		@event_manager.bind_mouse(proc_to_bind)
-	end
-
-	def start(&block)
-		loop do
-			t0 = SDL.get_ticks()
-			main_loop()
-			block.call()
-			t1 = SDL.get_ticks()
-			delay = @delay_fps+t0-t1
-			SDL.delay(delay) if delay>10
+		def target_fps=(t_fps)
+			@target_fps = t_fps
+			@delay_fps = 1000.0 / @target_fps
 		end
-	end
 
-	private
+		def bind_key(key_sym, proc_to_bind )
+			@event_manager.bind_key(key_sym , proc_to_bind )
+		end
 
-	def main_loop()
+		def bind_mouse(proc_to_bind)
+			@event_manager.bind_mouse(proc_to_bind)
+		end
+
+		def start(&block)
+			loop do
+				t0 = SDL.get_ticks()
+				main_loop()
+				block.call()
+				t1 = SDL.get_ticks()
+				delay = @delay_fps+t0-t1
+				SDL.delay(delay) if delay>10
+			end
+		end
+
+		private
+
+		def main_loop()
 			@cycles+=1
 			@event_manager.process_events()
 			@event_manager.exec_key_pressed()
 			draw_and_swap
-	end
+		end
 
-	# =====================================
-	#	Scene draw 
-	# =====================================
+		# =====================================
+		#	Scene draw 
+		# =====================================
 
-	def draw_and_swap
-	
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-	    glMatrixMode(GL_MODELVIEW)
-		glLoadIdentity
-		glColor3f(1.0,1.0,1.0)
-		
-		draw_gl_scene
+		def draw_and_swap
 
-		#
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+		    glMatrixMode(GL_MODELVIEW)
+			glLoadIdentity
+			glColor3f(1.0,1.0,1.0)
+
+			draw_gl_scene
+
+=begin
+		# just testing 2d fonts for the hud ( doesn't work atm )
 		SDL::TTF.init
 		font = SDL::TTF.open("data/ft/verdana.ttf",12)
 		s = SDL.get_video_surface
 		font.draw_solid_utf8(s,"Bleaargh",10,10,255,255,255)
-		#
+=end
 
-		SDL.GLSwapBuffers
+			SDL.GLSwapBuffers
 
-	end
+		end
 
-	def draw_gl_scene
+		def draw_gl_scene
 
-		# put cam
-		#gluLookAt(0,2,5, 0,0,0, 0,1,0)		
-		gluLookAt(
-			@cam.pos[0], @cam.pos[1], @cam.pos[2], 			#position
-			@cam.pos[0]+@cam.front[0], @cam.pos[1]+@cam.front[1], @cam.pos[2]+@cam.front[2],  # looking at
-			@cam.up[0], @cam.up[1], @cam.up[2] )			# up vector
+			# put cam
+			#gluLookAt(0,2,5, 0,0,0, 0,1,0)		
+			gluLookAt(
+				@cam.pos[0], @cam.pos[1], @cam.pos[2], 			#position
+				@cam.pos[0]+@cam.front[0], @cam.pos[1]+@cam.front[1], @cam.pos[2]+@cam.front[2],  # looking at
+				@cam.up[0], @cam.up[1], @cam.up[2] )			# up vector
 
-		#glRotate(@cam_angle, 0,1,0 )
+			#glRotate(@cam_angle, 0,1,0 )
 	
-		update_lights
+			update_lights
 
-		# put entities
-		Trogl::Object3d::Axis.draw() if @draw_axis
+			# put entities
+			Trogl::Object3d::Axis.draw() if @draw_axis
 
-		@entities.each { |ent| ent.draw() }
+			@entities.each { |ent| ent.draw() }
 
-	end
-
-
-	# =====================================
-	#	Gl init and Lighting
-	# =====================================
+		end
 
 
-	def init_gl_window(width =200, height = 200)
-		init_sdl(width,height)
-		init_gl
-		reshape(width, height)
-	end
+		# =====================================
+		#	Gl init and Lighting
+		# =====================================
+
+
+		def init_gl_window(width =200, height = 200)
+			init_sdl(width,height)
+			init_gl
+			reshape(width, height)
+		end
 	
-	def reshape(width = 200, height = 200 )
-		SDL.set_video_mode(width, height, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
-		puts "reshape called with params : " + width.to_s + " | " + height.to_s + " | " + @fov.to_s
-		#height = height < 1 ? 1 : height
-		glViewport(0, 0, width, height)
-		glMatrixMode(GL_PROJECTION)
-		glLoadIdentity
-		gluPerspective(@fov, width / height, 0.1, 100.0)
-		glMatrixMode(GL_MODELVIEW)
-	end
+		def reshape(width = 200, height = 200 )
+			SDL.set_video_mode(width, height, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
+			puts "reshape called with params : " + width.to_s + " | " + height.to_s + " | " + @fov.to_s
+			#height = height < 1 ? 1 : height
+			glViewport(0, 0, width, height)
+			glMatrixMode(GL_PROJECTION)
+			glLoadIdentity
+			gluPerspective(@fov, width / height, 0.1, 100.0)
+			glMatrixMode(GL_MODELVIEW)
+		end
 
-	def init_lights(pos=[2,5,10,1])
-		glEnable(GL_LIGHTING)
-		glEnable(GL_LIGHT0)
-		update_lights(pos=[2,5,10,1])
-	end
+		def init_lights(pos=[2,5,5,1])
+			position = pos
+			glEnable(GL_LIGHTING)
+			glEnable(GL_LIGHT0)
+			update_lights(position)
+		end
 
-	def update_lights(pos=[2,5,10,1])
+		def update_lights(pos=[2,5,5,1])
 
-		position = pos	
-		ambient = [0.2, 0.2, 0.2, 1.0]
-		mat_diffuse = [0.6, 0.6, 0.6, 1.0]
-		mat_specular = [1.0, 1.0, 1.0, 1.0]
-		mat_shininess = [50.0]
+			position = pos	
+			ambient = [0.2, 0.2, 0.4, 1.0]
+			mat_diffuse = [0.6, 0.6, 0.7, 1.0]
+			mat_specular = [1.0, 1.0, 1.0, 1.0]
+			mat_shininess = [50.0]
 
 =begin
 	  	ambient = [0.2, 0.1, 0.1, 1.0]
@@ -158,19 +160,19 @@ module Trogl
 	    mat_specular = [1.0, 1.0, 1.0, 1.0]
 	   	mat_shininess = [100.0]
 =end
-		glLight(GL_LIGHT0, GL_AMBIENT, ambient)
-		glLight(GL_LIGHT0, GL_POSITION, position)	
+			glLight(GL_LIGHT0, GL_AMBIENT, ambient)
+			glLight(GL_LIGHT0, GL_POSITION, position)	
 
-	    glMaterial(GL_FRONT, GL_DIFFUSE, mat_diffuse)
-	    glMaterial(GL_FRONT, GL_SPECULAR, mat_specular)
-	    glMaterial(GL_FRONT, GL_SHININESS, mat_shininess)
-	end
+		    glMaterial(GL_FRONT, GL_DIFFUSE, mat_diffuse)
+		    glMaterial(GL_FRONT, GL_SPECULAR, mat_specular)
+		    glMaterial(GL_FRONT, GL_SHININESS, mat_shininess)
+		end
 
-	def init_sdl(w,h)
-		SDL.init(SDL::INIT_VIDEO)
-		SDL.set_GL_attr(SDL::GL_DOUBLEBUFFER,1)
-		SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
-	end
+		def init_sdl(w,h)
+			SDL.init(SDL::INIT_VIDEO)
+			SDL.set_GL_attr(SDL::GL_DOUBLEBUFFER,1)
+			SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
+		end
 
 		def init_gl
 		    glClearColor(0.0, 0.0, 0.0, 0)

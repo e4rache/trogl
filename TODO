@@ -1,6 +1,10 @@
-- trogl.rb        : add 2d text ( HUD )
+O Trogl::Scene
+	o add 2d text ( HUD )
+	o add light control ( on, off, position, create , etc ... )
 
-- event_handler/    : add support for key toggle in key handler
+O Trogl::EventHandler    
+	o add support for key toggle in key handler
 
-- obj/obj_loader.rb : add support for changing the base reference
-- obj/obj_loader.rb : fix object scaling. works but scales the whole mvnt space, not just the object drawing
+O Trogl::Object3d::Loader::WaveFrontObject
+	o add support for changing the base reference
+	o fix object scaling. works but scales the whole mvnt space, not just the object drawing
