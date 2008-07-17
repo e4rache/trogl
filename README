@@ -1,2 +1,26 @@
-Trogl : Tiny Ruby OpenGL 3D engine
-Meant to be a playground/framework 3D engine to experiment some ruby and openGL stuff during my spare time.
+What it is :
+------------
+
+Trogl : Tiny Ruby OpenGL 3D graphic engine framework
+Meant to be a playground for experimenting some ruby and openGL stuff during my spare time.
+
+Dependencies :
+--------------
+	rubysdl
+	ruby-opengl
+
+you can install them via gem :
+
+$ gem install ruby-opengl --remote
+$ gem install rubysdl --remote
+
+Extra:
+------
+Has a port of the Nehe Lesson #06
+More NeHe lessons ports to come.
+
+Refs:
+-----
+http://ruby-opengl.rubyforge.org/
+http://www.kmc.gr.jp/~ohai/rubysdl.en.html
+http://nehe.gamedev.net/
