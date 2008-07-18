@@ -16,7 +16,7 @@ require "trogl/object3d/axis.rb"
 
 module Trogl
 	class Scene
-		attr_accessor	:window_width, :window_height, :cam_angle, :entities, :loop_callback,	:draw_axis, :cam
+		attr_accessor	:window_width, :window_height, :entities, :loop_callback,	:draw_axis, :cam
 
 		def initialize(w=200,h=200,f=90,caption="trogl")
 			puts "Initializing Trogl ..."
@@ -24,13 +24,13 @@ module Trogl
 			@target_fps = 30.0
 			@delay_fps = 1000.0 / @target_fps
 			@entities = []
-			@cam_angle=0.0
 			@window_width = w
 			@window_height = h
 			@fov=f
 			@cycles=0
 			@cam=Trogl::Math3d::Entity3d.new()
-			@cam.pos=[ 5,5,5 ]
+			@cam.pos=Vec.new([ 0,4,7])
+			
 			init_gl_window(@window_width,@window_height)
 			SDL::WM.set_caption(caption,"")
 			@event_manager = Trogl::EventHandler::SdlEventManager.create()
@@ -52,6 +52,8 @@ module Trogl
 		end
 
 		def start(&block)
+			@started=true
+			@event_manager.clear_event_queue()
 			loop do
 				t0 = SDL.get_ticks()
 				main_loop()
@@ -60,6 +62,11 @@ module Trogl
 				delay = @delay_fps+t0-t1
 				SDL.delay(delay) if delay>10
 			end
+		end
+
+		def light_pos=(pos)
+			puts "updating light with pos = #{pos.inspect}"
+			update_lights(pos)
 		end
 
 		private
@@ -84,26 +91,21 @@ module Trogl
 
 			draw_gl_scene
 
-=begin
-		# just testing 2d fonts for the hud ( doesn't work atm )
-		SDL::TTF.init
-		font = SDL::TTF.open("data/ft/verdana.ttf",12)
-		s = SDL.get_video_surface
-		font.draw_solid_utf8(s,"Bleaargh",10,10,255,255,255)
-=end
-
 			SDL.GLSwapBuffers
-
 		end
 
 		def draw_gl_scene
 
 			# put cam
-			#gluLookAt(0,2,5, 0,0,0, 0,1,0)		
+			# gluLookAt(0,2,5, 0,0,0, 0,1,0) - ( pos3f , point3d, up3f )	
 			gluLookAt(
 				@cam.pos[0], @cam.pos[1], @cam.pos[2], 			#position
 				@cam.pos[0]+@cam.front[0], @cam.pos[1]+@cam.front[1], @cam.pos[2]+@cam.front[2],  # looking at
-				@cam.up[0], @cam.up[1], @cam.up[2] )			# up vector
+			# 	0,0,0,
+				@cam.up[0], @cam.up[1], @cam.up[2] 
+			#	0,1,0
+			
+			)			# up vector
 
 			#glRotate(@cam_angle, 0,1,0 )
 	
@@ -149,8 +151,8 @@ module Trogl
 		def update_lights(pos=[2,5,5,1])
 
 			position = pos	
-			ambient = [0.2, 0.2, 0.4, 1.0]
-			mat_diffuse = [0.6, 0.6, 0.7, 1.0]
+			ambient = [0.2, 0.2, 0.2, 1.0]
+			mat_diffuse = [0.6, 0.6, 0.6, 1.0]
 			mat_specular = [1.0, 1.0, 1.0, 1.0]
 			mat_shininess = [50.0]
 

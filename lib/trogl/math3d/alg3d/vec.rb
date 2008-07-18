@@ -11,7 +11,11 @@ module Trogl::Math3d::Alg3d
             raise ArgumentError unless a.respond_to?('[]')
             @a = a; 
         end
-        
+       
+	   	def to_ary
+			@a
+		end
+
 		def [](i)
             @a[i]
         end

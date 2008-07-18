@@ -21,7 +21,14 @@ class SdlEventManager
 		@@vid_resize_callback = nil
 		@@mouse_event_callback = nil
 	end
-	
+
+	def clear_event_queue
+		while event = SDL::Event2.poll
+		end
+	end
+
+
+
 	def process_events
 		while event = SDL::Event2.poll
 			case event

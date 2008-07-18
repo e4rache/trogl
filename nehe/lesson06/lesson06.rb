@@ -127,6 +127,10 @@ gl_scene.bind_key(SDL::Key::Q	,Proc.new { exit } )
 # sets the camera position ( point of view )
 gl_scene.cam.pos = ([-3,0,7.0])
 
+
+#gl_scene.light_pos = ([2,5,5,1])
+
+
 # start the main loop of the scene giving it a block to execute after each frame is rendered
 gl_scene.start do
 	cube.x_rot += 0.2 

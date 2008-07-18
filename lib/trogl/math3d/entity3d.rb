@@ -15,11 +15,22 @@ module Trogl::Math3d
 			@up = up
 		end
 
-		def forward(dist)
+		def move_fw(dist)
 			x = @front*dist
 			new_pos = Vec.new([@pos[0]+x[0] , @pos[1]+x[1], @pos[2]+x[2] ])
 			@pos = new_pos
 		end
+		alias move_forward move_fw
+
+		def move_up(dist)
+			@pos = Vec.new(@pos)+@up*dist	
+		end
+
+		def straff(dist)
+			straff_vector = @front.cross(@up).normalized
+			@pos = Vec.new(@pos)+straff_vector*dist
+		end
+		alias move_left straff
 
 		def roll(angle) # rotate about 'front' vector
 			q = Quat.axis_rotation(@front,angle)
