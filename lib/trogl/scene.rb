@@ -16,26 +16,48 @@ require "trogl/object3d/axis.rb"
 
 module Trogl
 	class Scene
-		attr_accessor	:window_width, :window_height, :entities, :loop_callback,	:draw_axis, :cam
+		attr_accessor	:window_width, :window_height, :entities, :loop_callback,	:draw_axis, :cam, :light,	:lighting
 
 		def initialize(w=200,h=200,f=90,caption="trogl")
 			puts "Initializing Trogl ..."
 			@draw_axis = false
 			@target_fps = 30.0
+			@fov=f
+			
 			@delay_fps = 1000.0 / @target_fps
 			@entities = []
 			@window_width = w
 			@window_height = h
-			@fov=f
 			@cycles=0
+			
+			# == cam
 			@cam=Trogl::Math3d::Entity3d.new()
 			@cam.pos=Vec.new([ 0,4,7])
 			
+			# == light
+			@lighting = true
+			glEnable(GL_LIGHTING)
+			@light = Trogl::Light.new()
+
+			# == window
 			init_gl_window(@window_width,@window_height)
 			SDL::WM.set_caption(caption,"")
+			
+			# == event manager
 			@event_manager = Trogl::EventHandler::SdlEventManager.create()
 			@event_manager.set_vid_resize_callback((method:reshape))
+			
 			puts "Done."
+		end
+	
+		def lighting?
+			@lighting
+		end
+
+		def lighting=(lighting)
+			lighting == true ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING)
+			@lighting = lighting
+			puts " lighting = #{@lighting}"
 		end
 
 		def target_fps=(t_fps)
@@ -62,11 +84,6 @@ module Trogl
 				delay = @delay_fps+t0-t1
 				SDL.delay(delay) if delay>10
 			end
-		end
-
-		def light_pos=(pos)
-			puts "updating light with pos = #{pos.inspect}"
-			update_lights(pos)
 		end
 
 		private
@@ -106,11 +123,10 @@ module Trogl
 			#	0,1,0
 			
 			)			# up vector
-
-			#glRotate(@cam_angle, 0,1,0 )
 	
-			update_lights
-
+			
+			update_lights() if @light.on?
+			
 			# put entities
 			Trogl::Object3d::Axis.draw() if @draw_axis
 
@@ -141,20 +157,12 @@ module Trogl
 			glMatrixMode(GL_MODELVIEW)
 		end
 
-		def init_lights(pos=[2,5,5,1])
-			position = pos
-			glEnable(GL_LIGHTING)
-			glEnable(GL_LIGHT0)
-			update_lights(position)
-		end
-
-		def update_lights(pos=[2,5,5,1])
-
-			position = pos	
-			ambient = [0.2, 0.2, 0.2, 1.0]
-			mat_diffuse = [0.6, 0.6, 0.6, 1.0]
-			mat_specular = [1.0, 1.0, 1.0, 1.0]
-			mat_shininess = [50.0]
+		def update_lights()
+			position = @light.pos
+			ambient = @light.ambient
+			mat_diffuse = @light.diffuse
+			mat_specular = @light.specular
+			mat_shininess = @light.shininess
 
 =begin
 	  	ambient = [0.2, 0.1, 0.1, 1.0]
@@ -184,7 +192,6 @@ module Trogl
 		    glEnable(GL_DEPTH_TEST)
 			glEnable(GL_COLOR_MATERIAL)
 		    glShadeModel(GL_SMOOTH)
-			init_lights
 		end
 	end
 end

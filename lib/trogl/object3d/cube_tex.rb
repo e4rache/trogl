@@ -10,9 +10,9 @@ module Trogl::Object3d
 	class CubeTex < Trogl::Math3d::Entity3d
 		attr_accessor	:faces, :pos, :rot, :angle, :tex_file
 
-		def initialize
+		def initialize(tex_file="data/pic/Stripes0007_S.jpg")
 			super
-			@tex_file="data/pic/Stripes0007_S.jpg"
+			@tex_file=tex_file
 			init_tex
 
 			@tex_coords = [
@@ -121,7 +121,7 @@ module Trogl::Object3d
 				tex_point_index = 0
 				vertices[0..3].each { |vertex|
 					glTexCoord(@tex_coords[tex_point_index])
-					tex_point_index = ( tex_point_index +1 ) & 3
+					tex_point_index = ( tex_point_index +1 )
 					glVertex3fv(vertex)
 				}
 			}

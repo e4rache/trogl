@@ -1,6 +1,6 @@
 O Trogl::Scene
 	o add 2d text ( HUD )
-	o add light control ( on, off, position, create , etc ... )
+	o add multi light control ( on, off, position, create , etc ... )
 
 O Trogl::EventHandler    
 	o add support for key toggle in key handler
