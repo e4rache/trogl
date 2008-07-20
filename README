@@ -9,14 +9,15 @@ Dependencies :
 	rubysdl
 	ruby-opengl
 
-you can install them via gem :
+you can install these dep. via gem :
 
-$ gem install ruby-opengl --remote
-$ gem install rubysdl --remote
+# gem install ruby-opengl --remote
+# gem install rubysdl --remote
 
 Extra:
 ------
-Has a port of the Nehe Lesson #06
+A few Nehe Lessons has been ported :
+lessons 06, 07, 08
 More NeHe lessons ports to come.
 
 Refs:

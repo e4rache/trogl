@@ -13,17 +13,19 @@ class NeheCube
 	
 	attr_accessor	:x_rot,	:y_rot,	:z,
 					:x_speed,	:y_speed,
-					:filter
-					
+					:filter,	:blended
+								
 	def initialize
 		@x_rot = @y_rot = 0.0
 		@z = 5
 		@x_speed = 0.01
 		@y_speed = 0.02
 	
-		@tex_file = "crate.jpg"
+		@tex_file = "glass.bmp"
 		init_tex()
-		@filter = 0 # new
+		@filter = 2 # new
+		
+		@blended = true
 
 		# cube data : tex coords, vertices, faces, normals
 		@tex_coords = [
@@ -78,6 +80,10 @@ class NeheCube
 			    ]
 			]
 	end
+	
+	def blended?
+		@blended
+	end
 
 	def filter=(index)
 		if index > 2 
@@ -122,6 +128,14 @@ class NeheCube
 
 	# will be called by the main loop of Trogl:Scene. see below.
 	def draw
+		if ( @blended ) 
+			glEnable( GL_BLEND );
+			glDisable( GL_DEPTH_TEST );
+		else
+			glDisable( GL_BLEND );
+			glEnable( GL_DEPTH_TEST );
+		end
+
 		glMatrixMode(GL_MODELVIEW)
 		glPushMatrix()
 		
@@ -147,7 +161,7 @@ class NeheCube
 end
 
 # creates a new gl scene  800x600 screen size with a fov of 70
-gl_scene = Trogl::Scene.new(800,600,70,".oO Nehe Lesson 07 Oo.")
+gl_scene = Trogl::Scene.new(800,600,70,".oO Nehe Lesson 08 Oo.")
 gl_scene.light.on=true
 
 cube = NeheCube.new()
@@ -163,6 +177,8 @@ gl_scene.bind_key(SDL::Key::LEFT		,Proc.new {cube.y_speed-=0.01} )
 gl_scene.bind_key(SDL::Key::RIGHT		,Proc.new {cube.y_speed+=0.01} )
 gl_scene.bind_key(SDL::Key::UP			,Proc.new {cube.x_speed+=0.01} )
 gl_scene.bind_key(SDL::Key::DOWN		,Proc.new {cube.x_speed-=0.01} )
+gl_scene.bind_key(SDL::Key::B			,Proc.new {cube.blended = !cube.blended? } )
+
 
 # sets the camera position ( point of view )
 gl_scene.cam.pos = ([0,0,0])

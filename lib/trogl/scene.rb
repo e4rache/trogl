@@ -1,5 +1,5 @@
 =begin
-	Trogl. Tiny Ruby OpenGL (Environment)
+	Trogl. Tiny Ruby OpenGL graphic engine
 =end
 
 require "gl"
@@ -187,11 +187,14 @@ module Trogl
 		def init_gl
 		    glClearColor(0.0, 0.0, 0.0, 0)
 		    glClearDepth(1.0)
-		    glDepthFunc(GL_LEQUAL)
-			glEnable(GL_TEXTURE_2D)
 		    glEnable(GL_DEPTH_TEST)
+			glDepthFunc(GL_LEQUAL)
+			glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST )
+			glEnable(GL_TEXTURE_2D)
 			glEnable(GL_COLOR_MATERIAL)
 		    glShadeModel(GL_SMOOTH)
+			glColor4f( 1.0, 1.0, 1.0, 0.5)
+			glBlendFunc( GL_SRC_ALPHA, GL_ONE )
 		end
 	end
 end
