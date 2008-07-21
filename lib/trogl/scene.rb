@@ -86,6 +86,16 @@ module Trogl
 			end
 		end
 
+		def set_mouse_cursor(file)
+			surface = SDL::Surface.load(file)
+			SDL::Mouse.setCursor(surface,		# bitmap
+				[255, 255, 255],	# white
+				[  0,   0,   0],	# black
+				[128, 128, 128],	# transparent
+				[100, 100, 100],	# inverted
+				8, 8)		# hot_x, hot_y
+		end
+
 		private
 
 		def main_loop()
@@ -107,7 +117,8 @@ module Trogl
 			glColor3f(1.0,1.0,1.0)
 
 			draw_gl_scene
-
+			glFlush
+			glFinish
 			SDL.GLSwapBuffers
 		end
 

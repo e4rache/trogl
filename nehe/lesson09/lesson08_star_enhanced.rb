@@ -13,14 +13,16 @@ class NeheCube
 	
 	attr_accessor	:x_rot,	:y_rot,	:z,
 					:x_speed,	:y_speed,
-					:filter,	:blended
-								
+					:filter,	:blended,
+					:gap			
 	def initialize
 		@x_rot = @y_rot = 0.0
-		@z = 2
-		@x_speed = 6.01
-		@y_speed = 10.02
+		@z = 4.36
+		@x_speed = 2.24
+		@y_speed = -2.44
 	
+		@gap = 0.07
+
 		@tex_file = "star.bmp"
 		init_tex()
 		@filter = 2 # new
@@ -79,6 +81,7 @@ class NeheCube
 					[1,0,0] # normal
 			    ]
 			]
+			gen_display_list() # generate a display list for a single cube
 	end
 	
 	def blended?
@@ -135,15 +138,31 @@ class NeheCube
 			glDisable( GL_BLEND );
 			glEnable( GL_DEPTH_TEST );
 		end
-
-		glMatrixMode(GL_MODELVIEW)
-		glPushMatrix()
 		
-		glTranslate(0, 0, @z)
+		glMatrixMode(GL_MODELVIEW)
+		0.upto(4) do |k|
+			kgap = k*@gap
+			0.upto(4) do |j|
+				jgap = j*@gap
+				0.upto(2) do |i|
+					glPushMatrix()	
+					glTranslate(jgap,kgap, @z+i+@gap)
+					glRotate(@x_rot,1.0,0.0,0.0)
+					glRotate(@y_rot,0.0,1.0,0.0)
+					r=k/10.0
+					g=j/10.0
+					b=i/10.0
+					glColor(r,g,b,0.2)
+					glCallList(@display_list)
+					glPopMatrix()
+				end
+			end
+		end
+	end
 
-		glRotate(@x_rot,1.0,0.0,0.0)
-		glRotate(@y_rot,0.0,1.0,0.0)
-
+	def gen_display_list
+		@display_list = glGenLists(1)
+		glNewList(@display_list,GL_COMPILE)
 		glBindTexture(GL_TEXTURE_2D, @texture[@filter] )  # new
 		glBegin(GL_QUADS)
 		@faces.each { |vertices|
@@ -156,12 +175,12 @@ class NeheCube
 			}
 		}
 		glEnd()
-		glPopMatrix()
+		glEndList()
 	end
 end
 
 # creates a new gl scene  800x600 screen size with a fov of 70
-gl_scene = Trogl::Scene.new(800,600,70,".oO[ trogl/ruby moded Nehe Lesson 08 - e4rache ]Oo.")
+gl_scene = Trogl::Scene.new(800,600,80,".oO[ trogl/ruby moded Nehe Lesson 08 Oo.")
 gl_scene.light.on=true
 
 cube = NeheCube.new()
@@ -173,23 +192,30 @@ gl_scene.bind_key(SDL::Key::PAGEUP		,Proc.new { cube.z+=0.02 } )
 gl_scene.bind_key(SDL::Key::PAGEDOWN	,Proc.new { cube.z-=0.02} )
 gl_scene.bind_key(SDL::Key::F			,Proc.new { cube.filter+=1 } )
 gl_scene.bind_key(SDL::Key::L			,Proc.new { gl_scene.lighting = !gl_scene.lighting? } )
-gl_scene.bind_key(SDL::Key::LEFT		,Proc.new {cube.y_speed-=0.01} )
-gl_scene.bind_key(SDL::Key::RIGHT		,Proc.new {cube.y_speed+=0.01} )
-gl_scene.bind_key(SDL::Key::UP			,Proc.new {cube.x_speed+=0.01} )
-gl_scene.bind_key(SDL::Key::DOWN		,Proc.new {cube.x_speed-=0.01} )
+gl_scene.bind_key(SDL::Key::LEFT		,Proc.new {cube.y_speed-=0.02} )
+gl_scene.bind_key(SDL::Key::RIGHT		,Proc.new {cube.y_speed+=0.02} )
+gl_scene.bind_key(SDL::Key::UP			,Proc.new {cube.x_speed+=0.02} )
+gl_scene.bind_key(SDL::Key::DOWN		,Proc.new {cube.x_speed-=0.02} )
 gl_scene.bind_key(SDL::Key::B			,Proc.new {cube.blended = !cube.blended? } )
 
+gl_scene.bind_key(SDL::Key::A		, Proc.new {gl_scene.cam.straff(-0.2)} )
+gl_scene.bind_key(SDL::Key::D		, Proc.new {gl_scene.cam.straff(0.2)} )
+gl_scene.bind_key(SDL::Key::W		, Proc.new {gl_scene.cam.move_up(0.2)} )
+gl_scene.bind_key(SDL::Key::S		, Proc.new {gl_scene.cam.move_up(-0.2)} )
+gl_scene.bind_key(SDL::Key::O		, Proc.new {cube.gap+=0.01} )
+gl_scene.bind_key(SDL::Key::L		, Proc.new {cube.gap-=0.01} )
 
-# sets the camera position ( point of view )
-gl_scene.cam.pos = ([0,0,0])
+
+gl_scene.cam.pos = ([0.4,0.4,0])
 
 gl_scene.light.ambient = [0.5,0.5,0.5,1.0]
 gl_scene.light.diffuse = [1.0,1.0,1.0,1.0]
 gl_scene.light.pos = [4,4,2,1]
 
-# start the main loop of the scene giving it a block to execute after each frame is rendered
 gl_scene.start do
 	cube.x_rot += cube.x_speed
 	cube.y_rot += cube.y_speed
+#	puts "#{cube.x_speed} - #{cube.y_speed} - #{cube.gap} -#{cube.z}"
+#	puts "#{gl_scene.cam.pos}"
 end
 
