@@ -76,13 +76,29 @@ module Trogl
 		def start(&block)
 			@started=true
 			@event_manager.clear_event_queue()
+			t_initial = SDL.get_ticks()
+			frames = 0
+			
 			loop do
 				t0 = SDL.get_ticks()
+				
 				main_loop()
 				block.call()
+				
 				t1 = SDL.get_ticks()
-				delay = @delay_fps+t0-t1
-				SDL.delay(delay) if delay>10
+				delay = @delay_fps+t0-t1	# delay to meet target_fps
+				SDL.delay(delay) if delay>10 
+
+				# compute fps 
+				frames+=1
+				if ( t1 - t_initial > 5000 )
+					seconds = (t1 - t_initial)/1000.0
+					fps = frames / seconds
+					@current_fps = fps
+					puts " FPS: #{fps} "
+					t_initial = t1
+					frames = 0
+				end
 			end
 		end
 
@@ -99,7 +115,6 @@ module Trogl
 		private
 
 		def main_loop()
-			@cycles+=1
 			@event_manager.process_events()
 			@event_manager.exec_key_pressed()
 			draw_and_swap
