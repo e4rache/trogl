@@ -121,7 +121,7 @@ gl_scene.entities.push(stars)
 
 # key bindings
 gl_scene.bind_key(SDL::Key::Q			,Proc.new { exit } )
-gl_scene.bind_key(SDL::Key::T			,Proc.new {stars.twinkle=!stars.twinkle } )
+gl_scene.bind_key_toggle(SDL::Key::T			,Proc.new {stars.twinkle=!stars.twinkle } )
 gl_scene.bind_key(SDL::Key::UP			,Proc.new {stars.tilt+=0.5} )
 gl_scene.bind_key(SDL::Key::DOWN		,Proc.new {stars.tilt-=0.5} )
 gl_scene.bind_key(SDL::Key::PAGEUP		,Proc.new {stars.zoom+=0.2} )

@@ -65,12 +65,20 @@ module Trogl
 			@delay_fps = 1000.0 / @target_fps
 		end
 
+		def bind_key_toggle(key_sym,proc_to_bind)
+			@event_manager.bind_key_toggle(key_sym, proc_to_bind)
+		end
+
 		def bind_key(key_sym, proc_to_bind )
 			@event_manager.bind_key(key_sym , proc_to_bind )
 		end
 
 		def bind_mouse(proc_to_bind)
 			@event_manager.bind_mouse(proc_to_bind)
+		end
+		
+		def bg_color=(bg_color)
+			 glClearColor(bg_color[0],bg_color[1],bg_color[2],bg_color[3])
 		end
 
 		def start(&block)
@@ -211,7 +219,7 @@ module Trogl
 		end
 
 		def init_gl
-		    glClearColor(0.0, 0.0, 0.0, 0)
+		    glClearColor(0.16,0.16,0.16,0.0)
 		    glClearDepth(1.0)
 		    glEnable(GL_DEPTH_TEST)
 			glDepthFunc(GL_LEQUAL)

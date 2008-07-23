@@ -27,8 +27,6 @@ class SdlEventManager
 		end
 	end
 
-
-
 	def process_events
 		while event = SDL::Event2.poll
 			case event
@@ -68,7 +66,11 @@ class SdlEventManager
 	def key_pressed?(key_id)
 		@@keyb_handler.key_status(key_id)
 	end
-	
+
+	def bind_key_toggle(sdl_key_sym,method)
+	        @@keyb_handler.bind_key_toggle(sdl_key_sym, method)
+	end
+
 	def bind_key(sdl_key_sym,method)
 		@@keyb_handler.bind_key(sdl_key_sym, method)	
 	end

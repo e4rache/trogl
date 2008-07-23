@@ -54,8 +54,9 @@ g.bind_key(SDL::Key::H		, Proc.new {anim_obj.rot_y(0.04)} )
 g.bind_key(SDL::Key::K		, Proc.new {anim_obj.rot_y(-0.04)} )
 g.bind_key(SDL::Key::N		, Proc.new {anim_obj.rot_z(-0.04)} )
 g.bind_key(SDL::Key::M		, Proc.new {anim_obj.rot_z(0.04)} )
-g.bind_key(SDL::Key::I		, Proc.new {anim_obj.forward(0.1)} )
-g.bind_key(SDL::Key::L		, Proc.new {g.lighting = !g.lighting? } )
+g.bind_key(SDL::Key::I		, Proc.new {anim_obj.move_fw(0.1)} )
+g.bind_key(SDL::Key::L		, Proc.new {anim_obj.move_fw(-0.1)} )
+g.bind_key(SDL::Key::M		, Proc.new {g.lighting = !g.lighting? } )
 g.bind_key(SDL::Key::F1		, Proc.new {anim_obj = cube_tex} )
 g.bind_key(SDL::Key::F2		, Proc.new {anim_obj = wf_test} )
 g.bind_key(SDL::Key::F3		, Proc.new {anim_obj = g.cam } )
@@ -76,7 +77,7 @@ g.bind_mouse(mouse_callback)
 
 SDL::WM::grab_input(SDL::WM::GRAB_ON)
 SDL::Mouse.hide
-
+g.bg_color=[0.2,0.2,0.2,0.0]
 g.light.on=true
 g.lighting=true
 
@@ -86,7 +87,4 @@ g.cam.up=Vec.new([0,1,0])
 # tell trogl to rumble
 alpha=0
 g.start do
-# put something here that needs to be computed after each frame
-	alpha+=0.01
-	g.light.pos = [ 10*Math.sin(alpha),10*Math.cos(alpha),0 ]
 end

@@ -3,7 +3,7 @@ O Trogl::Scene
 	o add multi light control ( on, off, position, create , etc ... )
 
 O Trogl::EventHandler    
-	o add support for key toggle in key handler
+	o add support for key repeats for key toggles binds
 
 O Trogl::Object3d::Loader::WaveFrontObject
 	o add support for changing the base reference
