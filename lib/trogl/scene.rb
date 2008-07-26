@@ -16,7 +16,8 @@ require "trogl/object3d/axis.rb"
 
 module Trogl
 	class Scene
-		attr_accessor	:window_width, :window_height, :entities, :loop_callback,	:draw_axis, :cam, :light,	:lighting
+		attr_reader	:mouse_grab,	:current_fps
+		attr_accessor	:window_width, :window_height, :entities, :hud_entities, :loop_callback,	:draw_axis, :cam, :light,	:lighting
 
 		def initialize(w=200,h=200,f=90,caption="trogl")
 			puts "Initializing Trogl ..."
@@ -26,6 +27,7 @@ module Trogl
 			
 			@delay_fps = 1000.0 / @target_fps
 			@entities = []
+			@hud_entities = []
 			@window_width = w
 			@window_height = h
 			@cycles=0
@@ -47,6 +49,10 @@ module Trogl
 			@event_manager = Trogl::EventHandler::SdlEventManager.create()
 			@event_manager.set_vid_resize_callback((method:reshape))
 			
+			# == grab mouse default
+			#SDL::WM::grab_input(SDL::WM::GRAB_ON)
+			#SDL::Mouse.hide
+			@mouse_grab = true
 			puts "Done."
 		end
 	
@@ -75,6 +81,20 @@ module Trogl
 
 		def bind_mouse(proc_to_bind)
 			@event_manager.bind_mouse(proc_to_bind)
+		end
+
+		def toggle_mouse_grab
+			@mouse_grab = ! @mouse_grab
+			if ( @mouse_grab )
+				p "grab ON"
+				SDL::WM::grabInput(SDL::WM::GRAB_ON)
+				#SDL::Mouse.hide
+				#p SDL::WM::grab_input(SDL::WM::GRAB_QUERY)
+			else
+				p "grab OFF"
+				SDL::WM::grabInput(SDL::WM::GRAB_OFF) # FIX ME - seems there's a bug in ruby-sdl, this doesn't work as supposed to.
+				SDL::Mouse.show
+			end
 		end
 		
 		def bg_color=(bg_color)
@@ -108,16 +128,6 @@ module Trogl
 					frames = 0
 				end
 			end
-		end
-
-		def set_mouse_cursor(file)
-			surface = SDL::Surface.load(file)
-			SDL::Mouse.setCursor(surface,		# bitmap
-				[255, 255, 255],	# white
-				[  0,   0,   0],	# black
-				[128, 128, 128],	# transparent
-				[100, 100, 100],	# inverted
-				8, 8)		# hot_x, hot_y
 		end
 
 		private
@@ -166,8 +176,29 @@ module Trogl
 
 			@entities.each { |ent| ent.draw() }
 
+			@hud_entities.each do |hud_ent|
+				hud_draw { hud_ent.draw }
+			end
+			#glMatrixMode(GL_MODELVIEW)
 		end
 
+		def hud_draw(&hud_entity_draw_method)
+			glMatrixMode(GL_PROJECTION)
+			glPushMatrix
+			glLoadIdentity()
+			glOrtho(0,1000,1000,0,-1,1)
+			glMatrixMode(GL_MODELVIEW)
+			glPushMatrix
+			glLoadIdentity
+			glDisable(GL_LIGHTING) if lighting?
+
+			hud_entity_draw_method.call()
+			
+			glEnable(GL_LIGHTING) if lighting?
+			glPopMatrix
+			glMatrixMode(GL_PROJECTION)
+			glPopMatrix()
+		end
 
 		# =====================================
 		#	Gl init and Lighting
@@ -213,7 +244,7 @@ module Trogl
 		end
 
 		def init_sdl(w,h)
-			SDL.init(SDL::INIT_VIDEO)
+			SDL.init(SDL::INIT_VIDEO | SDL::INIT_EVENTTHREAD )
 			SDL.set_GL_attr(SDL::GL_DOUBLEBUFFER,1)
 			SDL.set_video_mode(w, h, 0, SDL::RESIZABLE|SDL::OPENGL|SDL::HWSURFACE)
 		end

@@ -130,6 +130,7 @@ module Trogl::Object3d
 		end
 
 		def draw_vectors
+			glDisable(GL_TEXTURE_2D)
 			glPushMatrix()
 			glColor(0.0,1.0,0.0)
 			glBegin(GL_LINES)
@@ -144,6 +145,7 @@ module Trogl::Object3d
 				glVertex((right*4.0).a)
 			glEnd()
 			glPopMatrix()
+			glEnable(GL_TEXTURE_2D)
 		end
 	end
 end
