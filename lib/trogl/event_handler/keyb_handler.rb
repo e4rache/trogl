@@ -3,7 +3,7 @@ module Trogl::EventHandler
 # 3 ways
 # simple pressed? check
 # toggle check 
-# toggle with repeat rate
+# toggle with repeat rate ( not implemented yet )
 
 	class KeyState
 		attr_accessor	:id , :pressed, :toggled, :bound_proc, :bound_proc_toggle

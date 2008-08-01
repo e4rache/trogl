@@ -16,10 +16,11 @@ require "trogl/object3d/axis.rb"
 
 module Trogl
 	class Scene
-		attr_reader	:mouse_grab,	:current_fps
-		attr_accessor	:window_width, :window_height, :entities, :hud_entities, :loop_callback,	:draw_axis, :cam, :light,	:lighting
+		attr_reader		:mouse_grab, :current_fps
+		attr_accessor	:window_width, :window_height, :entities, :hud_entities, :loop_callback,
+						:draw_axis, :cam, :light, :lighting
 
-		def initialize(w=200,h=200,f=90,caption="trogl")
+		def initialize(w=200,h=200,caption="trogl",f=90)
 			puts "Initializing Trogl ..."
 			@draw_axis = false
 			@target_fps = 30.0
@@ -34,7 +35,7 @@ module Trogl
 			
 			# == cam
 			@cam=Trogl::Math3d::Entity3d.new()
-			@cam.pos=Vec.new([ 0,4,7])
+			@cam.pos=Vec.new([0,4,7])
 			
 			# == light
 			@lighting = true
@@ -218,7 +219,7 @@ module Trogl
 			glViewport(0, 0, width, height)
 			glMatrixMode(GL_PROJECTION)
 			glLoadIdentity
-			gluPerspective(@fov, width / height, 0.1, 100.0)
+			gluPerspective(@fov, width / height, 0.1, 1000.0)
 			glMatrixMode(GL_MODELVIEW)
 		end
 

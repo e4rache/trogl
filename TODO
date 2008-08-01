@@ -1,5 +1,4 @@
 O Trogl::Scene
-	o add 2d text ( HUD )
 	o add multi light control ( on, off, position, create , etc ... )
 
 O Trogl::EventHandler    
@@ -8,3 +7,6 @@ O Trogl::EventHandler
 O Trogl::Object3d::Loader::WaveFrontObject
 	o add support for changing the base reference
 	o fix object scaling. works but scales the whole mvnt space, not just the object drawing
+
+O Trogl::Object3d::Loader
+	o add loader for other 3d object format. 3ds ?

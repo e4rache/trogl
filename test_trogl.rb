@@ -2,7 +2,7 @@
 
 require "lib/trogl.rb"
 
-g = Trogl::Scene.new(1200,700,70,".oO Trogl Oo.")	# create window ( width, height, fov )
+g = Trogl::Scene.new(1200,700,".oO Trogl Oo.",70)	# create window ( width, height, fov )
 
 # create a textured cube and set it's position
 
@@ -15,6 +15,7 @@ cube_tex_nehe_crate.pos=[0,0,0]
 # load a wavefront object (.obj) with a scale factor
 #wf_test = Trogl::Object3d::Loader::WaveFrontObject.new("data/obj/diatomee.obj",0.5)
 wf_test = Trogl::Object3d::Loader::WaveFrontObject.new("data/obj/bone.obj",0.05)
+#wf_test = Trogl::Object3d::Loader::WaveFrontObject.new("data/obj/spaceship.obj",0.05)
 wf_test.pos=[3,1,0]
 
 # sets some params in trogl
@@ -48,8 +49,8 @@ g.bind_key(SDL::Key::U		, Proc.new {anim_obj.rot_x(0.04)} )
 g.bind_key(SDL::Key::J		, Proc.new {anim_obj.rot_x(-0.04)} )
 g.bind_key(SDL::Key::H		, Proc.new {anim_obj.rot_y(0.04)} )
 g.bind_key(SDL::Key::K		, Proc.new {anim_obj.rot_y(-0.04)} )
-g.bind_key(SDL::Key::N		, Proc.new {anim_obj.rot_z(-0.04)} )
-g.bind_key(SDL::Key::M		, Proc.new {anim_obj.rot_z(0.04)} )
+g.bind_key(SDL::Key::B		, Proc.new {anim_obj.rot_z(-0.04)} )
+g.bind_key(SDL::Key::N		, Proc.new {anim_obj.rot_z(0.04)} )
 g.bind_key(SDL::Key::I		, Proc.new {anim_obj.move_fw(0.1)} )
 g.bind_key(SDL::Key::L		, Proc.new {anim_obj.move_fw(-0.1)} )
 
@@ -80,9 +81,6 @@ g.lighting=true
 
 g.cam.front=Vec.new([0,0,-1])
 g.cam.up=Vec.new([0,1,0])
-
-# tell trogl to rumble
-alpha=0
 
 g.start do
 	hud.current_fps = g.current_fps.to_i
