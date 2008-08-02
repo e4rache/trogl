@@ -118,7 +118,7 @@ class FontDrawer
 end
 
 
-g = Trogl::Scene.new(1200,700,70,".oO Trogl Oo.")	# create window ( width, height, fov )
+g = Trogl::Scene.new({:width => 1200, :height => 700, :caption => ".oO Trogl Oo.", :fov => 70 })	# create window ( width, height, fov )
 # sets some params in trogl
 #g.draw_axis=true
 g.target_fps=30

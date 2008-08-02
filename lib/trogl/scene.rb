@@ -20,17 +20,20 @@ module Trogl
 		attr_accessor	:window_width, :window_height, :entities, :hud_entities, :loop_callback,
 						:draw_axis, :cam, :light, :lighting
 
-		def initialize(w=200,h=200,caption="trogl",f=90)
+		#def initialize(w=200,h=200,caption="trogl",f=90)
+		def initialize(conf)
+			# :width, :height, :fov, :caption
+
 			puts "Initializing Trogl ..."
 			@draw_axis = false
 			@target_fps = 30.0
-			@fov=f
+			@fov=conf[:fov]
 			
 			@delay_fps = 1000.0 / @target_fps
 			@entities = []
 			@hud_entities = []
-			@window_width = w
-			@window_height = h
+			@window_width = conf[:width]
+			@window_height = conf[:height]
 			@cycles=0
 			
 			# == cam
@@ -44,7 +47,7 @@ module Trogl
 
 			# == window
 			init_gl_window(@window_width,@window_height)
-			SDL::WM.set_caption(caption,"")
+			SDL::WM.set_caption(conf[:caption],"")
 			
 			# == event manager
 			@event_manager = Trogl::EventHandler::SdlEventManager.create()

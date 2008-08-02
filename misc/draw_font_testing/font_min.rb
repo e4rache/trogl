@@ -67,7 +67,7 @@ case MODE
 		$h = 200
 end
 
-gl_scene = Trogl::Scene.new($w,$h,70,".oO[ trogl/ruby testing fonts/ftgl ]Oo.")
+gl_scene = Trogl::Scene.new({:width => $w, :height => $h, :fov => 70, :caption => ".oO[ trogl/ruby testing fonts/ftgl ]Oo."})
 gl_scene.light.on=true
 gl_scene.target_fps=30
 

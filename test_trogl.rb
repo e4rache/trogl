@@ -2,7 +2,7 @@
 
 require "lib/trogl.rb"
 
-g = Trogl::Scene.new(1200,700,".oO Trogl Oo.",70)	# create window ( width, height, fov )
+g = Trogl::Scene.new({ :width => 1200, :height => 700, :caption => ".oO Trogl Oo.", :fov => 70 })	# create window ( width, height, fov )
 
 # create a textured cube and set it's position
 

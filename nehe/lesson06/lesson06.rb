@@ -113,7 +113,7 @@ class NeheCube
 end
 
 # creates a new gl scene  800x600 screen size with a fov of 70
-gl_scene = Trogl::Scene.new(800,600,70,".oO[ trogl/ruby Nehe Lesson 06 - e4rache ]Oo.")
+gl_scene = Trogl::Scene.new( { :width => 800,:height => 600, :fov => 70, :caption => ".oO[ trogl/ruby Nehe Lesson 06 - e4rache ]Oo."})
 gl_scene.light.on=false
 # instanciates the above Cube class definition.
 cube = NeheCube.new()
